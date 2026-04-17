@@ -14,7 +14,7 @@ interface ProductRepository {
      * @param category If provided, filters products by this category string (e.g., "electronics", "grocery").
      *                 The implementation handles mapping or normalizing these strings to the internal
      *                 domain categories. If null, all available products are returned.
-     * @return A list of [Product] objects.
+     * @return A [Result] containing a list of [Product] objects.
      */
-    suspend fun getProducts(category: String? = null): List<Product>
+    suspend fun getProducts(category: String? = null): Result<List<Product>>
 }

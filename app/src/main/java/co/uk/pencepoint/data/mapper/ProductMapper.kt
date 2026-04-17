@@ -1,5 +1,7 @@
 package co.uk.pencepoint.data.mapper
 
+import co.uk.pencepoint.data.local.entities.ProductEntity
+import co.uk.pencepoint.data.local.entities.RatingEntity
 import co.uk.pencepoint.data.remote.dto.ProductDto
 import co.uk.pencepoint.domain.model.Category
 import co.uk.pencepoint.domain.model.Money
@@ -25,6 +27,40 @@ fun ProductDto.toDomainModel(taxProvider: TaxProvider) = Product(
     category = mapToCategory(category),
     imageUrl = image,
     taxRate = taxProvider.getTaxRate(mapToCategory(category), calculatePrice(price))
+)
+
+
+/**
+ * Converts a [ProductEntity] to a domain [Product].
+ *
+ * @param taxProvider The [TaxProvider] used to determine the tax rate for the product.
+ * @return A [Product] domain model.
+ */
+fun ProductEntity.toDomainModel(taxProvider: TaxProvider) = Product(
+    id = id.toLong(),
+    title = title,
+    description = description,
+    price = calculatePrice(price),
+    category = mapToCategory(category),
+    imageUrl = image,
+    taxRate = taxProvider.getTaxRate(mapToCategory(category), calculatePrice(price))
+)
+
+
+/**
+ * Converts a [ProductDto] to a [ProductEntity] for local storage.
+ *
+ * @return A [ProductEntity] suitable for Room database persistence.
+ */
+fun ProductDto.toEntity() = ProductEntity(
+    id = id,
+    title = title,
+    description = description,
+    price = price,
+    category = category,
+    image = image,
+    rating = RatingEntity(rate = rating?.rate ?: 0.0, count = rating?.count ?: 0),
+    cachedAt = System.currentTimeMillis()
 )
 
 /**
