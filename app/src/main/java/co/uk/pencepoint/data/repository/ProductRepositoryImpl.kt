@@ -28,7 +28,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val taxProvider: TaxProvider
 ) : ProductRepository {
 
-    companion object{
+    companion object {
         private val CACHE_TIMEOUT = TimeUnit.MINUTES.toMillis(10)
     }
 
@@ -44,22 +44,23 @@ class ProductRepositoryImpl @Inject constructor(
         } else {
             productDao.getProductsByCategory(category)
         }
-        val isCacheValid = cachedProducts.isNotEmpty() && System.currentTimeMillis() - cachedProducts.first().cachedAt < CACHE_TIMEOUT
-            return try {
-                if (isCacheValid) {
-                    Result.success(cachedProducts.map { it.toDomainModel(taxProvider) })
-                } else {
-                    val updatedProducts = if (category.isNullOrEmpty()) {
-                        api.getProducts()
-                    } else {
-                        api.getProducts(category)
-                    }
-                    productDao.insertProducts(updatedProducts.map { it.toEntity() })
-                    Result.success(updatedProducts.map { it.toDomainModel(taxProvider) })
-                }
-            } catch (e: Exception) {
-                if (e is CancellationException) throw e // Propagate cancellation
+        val isCacheValid =
+            cachedProducts.isNotEmpty() && System.currentTimeMillis() - cachedProducts.first().cachedAt < CACHE_TIMEOUT
+        return try {
+            if (isCacheValid) {
                 Result.success(cachedProducts.map { it.toDomainModel(taxProvider) })
+            } else {
+                val updatedProducts = if (category.isNullOrEmpty()) {
+                    api.getProducts()
+                } else {
+                    api.getProducts(category)
+                }
+                productDao.insertProducts(updatedProducts.map { it.toEntity() })
+                Result.success(updatedProducts.map { it.toDomainModel(taxProvider) })
             }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e // Propagate cancellation
+            Result.success(cachedProducts.map { it.toDomainModel(taxProvider) })
+        }
     }
 }
