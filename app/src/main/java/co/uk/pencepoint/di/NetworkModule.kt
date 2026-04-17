@@ -12,10 +12,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Hilt module that provides network-related dependencies.
+ *
+ * This module is responsible for configuring Retrofit, OkHttp, and the API services.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    /**
+     * Provides an [HttpLoggingInterceptor] for logging network requests and responses.
+     * Logging is only enabled for debug builds.
+     */
     @Provides
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -28,6 +37,9 @@ object NetworkModule {
         }
     }
 
+    /**
+     * Provides an [OkHttpClient] configured with the logging interceptor.
+     */
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -38,6 +50,9 @@ object NetworkModule {
             .build()
     }
 
+    /**
+     * Provides an instance of [FakeStoreApi] using Retrofit.
+     */
     @Provides
     @Singleton
     fun provideFakeStoreApi(okHttpClient: OkHttpClient): FakeStoreApi {

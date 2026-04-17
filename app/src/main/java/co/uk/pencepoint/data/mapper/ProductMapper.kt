@@ -7,6 +7,16 @@ import co.uk.pencepoint.domain.model.Product
 import co.uk.pencepoint.domain.repository.TaxProvider
 import kotlin.math.roundToLong
 
+/**
+ * Mapper functions to convert Data Transfer Objects (DTOs) to Domain models.
+ */
+
+/**
+ * Converts a [ProductDto] to a domain [Product].
+ *
+ * @param taxProvider The [TaxProvider] used to determine the tax rate for the product.
+ * @return A [Product] domain model.
+ */
 fun ProductDto.toDomainModel(taxProvider: TaxProvider) = Product(
     id = id.toLong(),
     title = title,
@@ -17,6 +27,12 @@ fun ProductDto.toDomainModel(taxProvider: TaxProvider) = Product(
     taxRate = taxProvider.getTaxRate(mapToCategory(category), calculatePrice(price))
 )
 
+/**
+ * Maps a category string from the API to the internal [Category] enum.
+ *
+ * @param category The category string to map.
+ * @return The corresponding [Category] enum.
+ */
 private fun mapToCategory(category: String): Category {
     val normalizedCategory = category.lowercase().trim()
     return when {
@@ -31,5 +47,11 @@ private fun mapToCategory(category: String): Category {
     }
 }
 
+/**
+ * Converts a price in [Double] (as received from the API) to a [Money] object in pence.
+ *
+ * @param price The price as a [Double].
+ * @return A [Money] object representing the price in pence.
+ */
 private fun calculatePrice(price: Double) = Money((price * 100.0).roundToLong())
 

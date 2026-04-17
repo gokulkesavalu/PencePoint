@@ -8,10 +8,18 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Hilt module that provides repository-related dependencies.
+ *
+ * This module binds repository interfaces to their concrete implementations.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
+    /**
+     * Binds the [ProductRepositoryImpl] to the [ProductRepository] interface.
+     */
     @Binds
     @Singleton
     abstract fun bindProductRepository(

@@ -1,5 +1,10 @@
 package co.uk.pencepoint.domain.model
 
+/**
+ * Domain model representing a shopping basket.
+ *
+ * @property items The list of [BasketItem] currently in the basket.
+ */
 data class Basket(
     val items: List<BasketItem> = emptyList()
 ) {

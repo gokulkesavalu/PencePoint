@@ -33,6 +33,13 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+/**
+ * The theme for the PencePoint application.
+ *
+ * @param darkTheme Whether the dark theme should be used.
+ * @param dynamicColor Whether dynamic color (Material You) should be used on supported devices.
+ * @param content The composable content to apply the theme to.
+ */
 @Composable
 fun PencePointTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

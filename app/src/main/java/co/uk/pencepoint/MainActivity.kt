@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import co.uk.pencepoint.ui.theme.PencePointTheme
 
+/**
+ * The main activity and entry point of the application.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * A simple greeting composable.
+ *
+ * @param name The name to greet.
+ * @param modifier Modifier to apply to the [Text].
+ */
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -38,6 +47,9 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+/**
+ * Preview for the [Greeting] composable.
+ */
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

@@ -6,6 +6,14 @@ package co.uk.pencepoint.domain.model
  *
  * It is a "pure" data model, meaning it doesn't contain business logic
  * like tax calculation. That logic is handled by a TaxProvider.
+ *
+ * @property id Unique identifier for the product.
+ * @property title The name of the product.
+ * @property price The base price of the product using the [Money] value object.
+ * @property description A detailed description of the product.
+ * @property category The category the product belongs to, used for tax calculation.
+ * @property imageUrl URL to the product image.
+ * @property taxRate The current tax rate applied to this product instance.
  */
 data class Product(
     val id: Long,
@@ -17,6 +25,9 @@ data class Product(
     val taxRate: Double
 )
 
+/**
+ * Categories for products in the POS system.
+ */
 enum class Category {
     ELECTRONICS,
     CLOTHING,
