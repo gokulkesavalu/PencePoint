@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -37,6 +40,7 @@ import co.uk.pencepoint.domain.model.Category
 import co.uk.pencepoint.domain.model.Money
 import co.uk.pencepoint.domain.model.Product
 import co.uk.pencepoint.ui.navigation.LocalNavActions
+import co.uk.pencepoint.ui.navigation.PencePointActions
 import co.uk.pencepoint.ui.theme.PencePointTheme
 import coil.compose.AsyncImage
 
@@ -79,10 +83,18 @@ fun ProductListContent(
                 },
                 actions = {
                     IconButton(onClick = actions.onViewBasketClick) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Back"
-                        )
+                        BadgedBox(
+                            badge = {
+                                Badge {
+                                    Text(text = "0")
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ShoppingCart,
+                                contentDescription = "View Basket"
+                            )
+                        }
                     }
                 }
             )
@@ -163,31 +175,38 @@ fun ProductItem(
 @Composable
 fun ProductListPreview() {
     PencePointTheme {
-        ProductListContent(
-            uiState = ProductListUiState(
-                products = listOf(
-                    Product(
-                        id = 1,
-                        title = "Fjallraven - Backpack",
-                        price = Money(10995),
-                        description = "Desc",
-                        category = Category.OTHER,
-                        imageUrl = "",
-                        taxRate = 0.0
-                    ),
-                    Product(
-                        id = 2,
-                        title = "Mens Casual T-Shirts",
-                        price = Money(2230),
-                        description = "Desc",
-                        category = Category.CLOTHING,
-                        imageUrl = "",
-                        taxRate = 10.0
+        CompositionLocalProvider(
+            LocalNavActions provides PencePointActions(
+                onBackClick = {},
+                onViewBasketClick = {}
+            )
+        ) {
+            ProductListContent(
+                uiState = ProductListUiState(
+                    products = listOf(
+                        Product(
+                            id = 1,
+                            title = "Fjallraven - Backpack",
+                            price = Money(10995),
+                            description = "Desc",
+                            category = Category.OTHER,
+                            imageUrl = "",
+                            taxRate = 0.0
+                        ),
+                        Product(
+                            id = 2,
+                            title = "Mens Casual T-Shirts",
+                            price = Money(2230),
+                            description = "Desc",
+                            category = Category.CLOTHING,
+                            imageUrl = "",
+                            taxRate = 10.0
+                        )
                     )
-                )
-            ),
-            onProductClick = {},
-        )
+                ),
+                onProductClick = {},
+            )
+        }
     }
 }
 
@@ -196,10 +215,17 @@ fun ProductListPreview() {
 @Composable
 fun ProductListLoadingPreview() {
     PencePointTheme {
-        ProductListContent(
-            uiState = ProductListUiState(isLoading = true),
-            onProductClick = {},
-        )
+        CompositionLocalProvider(
+            LocalNavActions provides PencePointActions(
+                onBackClick = {},
+                onViewBasketClick = {}
+            )
+        ) {
+            ProductListContent(
+                uiState = ProductListUiState(isLoading = true),
+                onProductClick = {},
+            )
+        }
     }
 }
 
@@ -208,9 +234,16 @@ fun ProductListLoadingPreview() {
 @Composable
 fun ProductListErrorPreview() {
     PencePointTheme {
-        ProductListContent(
-            uiState = ProductListUiState(error = "No internet connection"),
-            onProductClick = {},
-        )
+        CompositionLocalProvider(
+            LocalNavActions provides PencePointActions(
+                onBackClick = {},
+                onViewBasketClick = {}
+            )
+        ) {
+            ProductListContent(
+                uiState = ProductListUiState(error = "No internet connection"),
+                onProductClick = {},
+            )
+        }
     }
 }

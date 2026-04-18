@@ -13,6 +13,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,6 +36,7 @@ import co.uk.pencepoint.domain.model.Category
 import co.uk.pencepoint.domain.model.Money
 import co.uk.pencepoint.domain.model.Product
 import co.uk.pencepoint.ui.navigation.LocalNavActions
+import co.uk.pencepoint.ui.navigation.PencePointActions
 import co.uk.pencepoint.ui.theme.PencePointTheme
 import coil.compose.AsyncImage
 
@@ -61,10 +65,18 @@ fun ProductDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = actions.onViewBasketClick) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Back"
-                        )
+                        BadgedBox(
+                            badge = {
+                                Badge {
+                                    Text(text = "0")
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ShoppingCart,
+                                contentDescription = "View Basket"
+                            )
+                        }
                     }
                 }
             )
@@ -214,19 +226,26 @@ private fun ProductDetailContent(
 @Composable
 fun ProductDetailPreview() {
     PencePointTheme {
-        ProductDetailScreen(
-            uiState = ProductDetailsUiState(
-                product = Product(
-                    id = 1,
-                    title = "No. 1 Backpack, Fits 15 Laptops",
-                    price = Money(10995),
-                    description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-                    category = Category.OTHER,
-                    imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-                    taxRate = 20.0
-                )
-            ),
-            onAddToCartClick = {},
-        )
+        CompositionLocalProvider(
+            LocalNavActions provides PencePointActions(
+                onBackClick = {},
+                onViewBasketClick = {}
+            )
+        ) {
+            ProductDetailScreen(
+                uiState = ProductDetailsUiState(
+                    product = Product(
+                        id = 1,
+                        title = "No. 1 Backpack, Fits 15 Laptops",
+                        price = Money(10995),
+                        description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+                        category = Category.OTHER,
+                        imageUrl = "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+                        taxRate = 20.0
+                    )
+                ),
+                onAddToCartClick = {},
+            )
+        }
     }
 }
