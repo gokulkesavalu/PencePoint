@@ -44,4 +44,21 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideProductDao(appDatabase: PencePointDatabase) = appDatabase.productDao()
+
+    /**
+     * Provides the [BasketDao] for basket-related operations.
+     *
+     * @param appDatabase The [PencePointDatabase] instance.
+     * @return The [BasketDao] instance.
+     */
+    /**
+     * Provides the [BasketDao] for basket-related operations.
+     *
+     * @param appDatabase The [PencePointDatabase] instance.
+     * @return The [BasketDao] instance.
+     */
+    @Provides
+    @Singleton
+    fun provideBasketDao(appDatabase: PencePointDatabase) = appDatabase.basketDao()
+
 }
