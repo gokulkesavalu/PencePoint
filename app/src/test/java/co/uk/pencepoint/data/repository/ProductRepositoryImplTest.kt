@@ -6,9 +6,6 @@ import co.uk.pencepoint.data.local.entities.RatingEntity
 import co.uk.pencepoint.data.remote.FakeStoreApi
 import co.uk.pencepoint.data.remote.dto.ProductDto
 import co.uk.pencepoint.data.remote.dto.RatingDto
-import co.uk.pencepoint.domain.model.Category
-import co.uk.pencepoint.domain.model.Product
-import co.uk.pencepoint.domain.repository.TaxProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -27,7 +24,8 @@ class ProductRepositoryImplTest {
     private val api: FakeStoreApi = mockk()
     private val productDao: ProductDao = mockk(relaxed = true)
     private val taxProvider: LocalTaxProvider = mockk()
-    private val repository: ProductRepositoryImpl = ProductRepositoryImpl(api, productDao, taxProvider)
+    private val repository: ProductRepositoryImpl =
+        ProductRepositoryImpl(api, productDao, taxProvider)
 
     private val sampleDto = ProductDto(
         id = 1,

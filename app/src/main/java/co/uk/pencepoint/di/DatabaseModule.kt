@@ -3,6 +3,7 @@ package co.uk.pencepoint.di
 import android.content.Context
 import androidx.room.Room
 import co.uk.pencepoint.data.local.PencePointDatabase
+import co.uk.pencepoint.data.local.dao.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
