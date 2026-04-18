@@ -63,6 +63,8 @@ Taxes are calculated per category (e.g., Electronics: 15%, Food: 5%) and are pro
 - **Stateless/Stateful Pattern**: Screens are split into a stateful entry point (handling ViewModel injection) and a stateless content block (handling UI layout). This facilitates easy integration with **Compose Previews** and simplifies unit testing.
 - **CompositionLocal for Navigation**: Uses `LocalNavActions` to provide navigation callbacks (like `onBackClick` or `onViewBasketClick`) down the UI tree without prop-drilling. This simplifies deep UI hierarchies and makes components more reusable.
 - **Material 3 Integration**: Leverages modern M3 components like `BadgedBox` for real-time basket count updates in the `TopAppBar`, providing clear visual feedback to the user.
+- **Reactive UI Synchronization**: ViewModels leverage Kotlin `Flow` and the `combine` operator to merge remote data with local database streams. This ensures that UI elements like basket badges are updated in real-time across all screens (List, Details, Basket) using a single source of truth.
+- **Efficient State Management**: Uses `stateIn` with `SharingStarted.WhileSubscribed(5000)` to keep data streams "warm" during configuration changes (like screen rotation) while avoiding unnecessary resource consumption when the app is in the background.
 - **Responsive Layouts**: Screens like `ProductDetail` and `Basket` are designed with accessibility in mind, featuring fixed primary actions and scrollable content areas.
 
 ## ⚙️ Development Setup
