@@ -61,7 +61,9 @@ Taxes are calculated per category (e.g., Electronics: 15%, Food: 5%) and are pro
 ## 🎨 UI Patterns
 
 - **Stateless/Stateful Pattern**: Screens are split into a stateful entry point (handling ViewModel injection) and a stateless content block (handling UI layout). This facilitates easy integration with **Compose Previews** and simplifies unit testing.
-- **Responsive Layouts**: Screens like `ProductDetail` are designed with accessibility in mind, featuring fixed primary actions (like "Add to Cart") and scrollable content areas.
+- **CompositionLocal for Navigation**: Uses `LocalNavActions` to provide navigation callbacks (like `onBackClick` or `onViewBasketClick`) down the UI tree without prop-drilling. This simplifies deep UI hierarchies and makes components more reusable.
+- **Material 3 Integration**: Leverages modern M3 components like `BadgedBox` for real-time basket count updates in the `TopAppBar`, providing clear visual feedback to the user.
+- **Responsive Layouts**: Screens like `ProductDetail` and `Basket` are designed with accessibility in mind, featuring fixed primary actions and scrollable content areas.
 
 ## ⚙️ Development Setup
 
@@ -76,6 +78,6 @@ Taxes are calculated per category (e.g., Electronics: 15%, Food: 5%) and are pro
 - [x] Network Layer (FakeStore API)
 - [x] Offline Support (Room Integration & Caching)
 - [x] Product List & Details UI
-- [ ] Cart/Basket Management & UI
+- [x] Cart/Basket Management & UI
 - [ ] Checkout Flow & Transaction History
 - [ ] Unit & UI Testing Suite
