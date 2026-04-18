@@ -27,6 +27,15 @@ interface FakeStoreApi {
     @GET("products/category/{category}")
     suspend fun getProducts(@Path("category") category: String): List<ProductDto>
 
+    /**
+     * Fetches a single product details by its ID.
+     *
+     * @param productId The ID of the product to fetch.
+     * @return A [ProductDto] object representing the product.
+     */
+    @GET("products/{productId}")
+    suspend fun getProductDetails(@Path("productId") productId: Long): ProductDto
+
     companion object {
         const val BASE_URL = "https://fakestoreapi.com/"
     }

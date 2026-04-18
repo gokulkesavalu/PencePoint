@@ -13,7 +13,7 @@ package co.uk.pencepoint.data.remote.dto
  * @property rating Rating information if available.
  */
 data class ProductDto(
-    val id: Int,
+    val id: Long,
     val title: String,
     val price: Double,
     val description: String,

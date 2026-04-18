@@ -12,6 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -107,5 +108,43 @@ class ProductRepositoryImplTest {
         assertEquals(1, result.getOrNull()?.size)
         coVerify(exactly = 1) { api.getProducts() }
         coVerify(exactly = 0) { productDao.insertProducts(any()) }
+    }
+
+    @Test
+    fun `getProductDetails returns cached data when cache is valid`() = runTest {
+        val validCache = listOf(sampleEntity.copy(cachedAt = System.currentTimeMillis()))
+        coEvery { productDao.getProducts() } returns validCache
+
+        val result = repository.getProductDetails(1)
+
+        assertTrue(result.isSuccess)
+        assertEquals("Test Product", result.getOrNull()?.title)
+        coVerify(exactly = 0) { api.getProductDetails(1) }
+    }
+
+    @Test
+    fun `getProductDetails fetches from API when cache is expired`() = runTest {
+        val expiredTimestamp = System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(11)
+        val expiredCache = listOf(sampleEntity.copy(cachedAt = expiredTimestamp))
+        coEvery { productDao.getProducts() } returns expiredCache
+
+        val result = repository.getProductDetails(1)
+
+        assertTrue(result.isFailure)
+        coVerify(exactly = 1) { api.getProductDetails(1) }
+    }
+
+    @Test
+    fun `getProductDetails returns cached data when API fails`() = runTest {
+        val expiredTimestamp = System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(11)
+        val cachedData = listOf(sampleEntity.copy(cachedAt = expiredTimestamp))
+        coEvery { productDao.getProducts() } returns cachedData
+        coEvery { api.getProductDetails(1) } throws Exception("Network Error")
+
+        val result = repository.getProductDetails(1)
+
+        assertTrue(result.isFailure)
+        assertNull(result.getOrNull()?.title)
+        coVerify(exactly = 1) { api.getProductDetails(1) }
     }
 }

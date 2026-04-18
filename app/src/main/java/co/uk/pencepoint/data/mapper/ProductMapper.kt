@@ -20,7 +20,7 @@ import kotlin.math.roundToLong
  * @return A [Product] domain model.
  */
 fun ProductDto.toDomainModel(taxProvider: TaxProvider) = Product(
-    id = id.toLong(),
+    id = id,
     title = title,
     description = description,
     price = calculatePrice(price),
@@ -37,7 +37,7 @@ fun ProductDto.toDomainModel(taxProvider: TaxProvider) = Product(
  * @return A [Product] domain model.
  */
 fun ProductEntity.toDomainModel(taxProvider: TaxProvider) = Product(
-    id = id.toLong(),
+    id = id,
     title = title,
     description = description,
     price = calculatePrice(price),
@@ -77,6 +77,7 @@ private fun mapToCategory(category: String): Category {
         normalizedCategory.contains("food") || normalizedCategory.contains("grocery") || normalizedCategory.contains(
             "drinks"
         ) -> Category.FOOD
+
         normalizedCategory.contains("books") -> Category.BOOKS
         normalizedCategory.contains("jewel") -> Category.JEWELLERY
         else -> Category.OTHER

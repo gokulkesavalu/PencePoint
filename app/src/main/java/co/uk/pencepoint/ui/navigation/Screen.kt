@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * Uses type-safe navigation with Kotlin Serialization.
  */
 sealed interface Screen {
-    
+
     @Serializable
     data object ProductList : Screen
 

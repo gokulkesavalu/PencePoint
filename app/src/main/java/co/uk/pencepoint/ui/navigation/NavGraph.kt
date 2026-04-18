@@ -7,8 +7,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import co.uk.pencepoint.ui.screens.productdetail.ProductDetailScreen
+import co.uk.pencepoint.ui.screens.productdetail.ProductDetailsViewModel
 import co.uk.pencepoint.ui.screens.productlist.ProductListScreen
 import co.uk.pencepoint.ui.screens.productlist.ProductListViewModel
 
@@ -37,12 +37,12 @@ fun NavGraph(
             )
         }
         composable<Screen.ProductDetail> { backStackEntry ->
-            val detail: Screen.ProductDetail = backStackEntry.toRoute()
+            val viewModel: ProductDetailsViewModel = hiltViewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             ProductDetailScreen(
-                productId = detail.productId,
-                onBackClick = {
-                    navController.navigateUp()
-                }
+                uiState = uiState,
+                onBackClick = { navController.popBackStack() },
+                onAddToCartClick = { /* Handle adding to cart */ }
             )
         }
     }

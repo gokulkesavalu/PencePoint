@@ -1,11 +1,9 @@
 package co.uk.pencepoint.data.repository
 
 import co.uk.pencepoint.data.local.dao.ProductDao
-import co.uk.pencepoint.data.local.entities.ProductEntity
 import co.uk.pencepoint.data.mapper.toDomainModel
 import co.uk.pencepoint.data.mapper.toEntity
 import co.uk.pencepoint.data.remote.FakeStoreApi
-import co.uk.pencepoint.data.remote.dto.ProductDto
 import co.uk.pencepoint.domain.model.Product
 import co.uk.pencepoint.domain.repository.ProductRepository
 import co.uk.pencepoint.domain.repository.TaxProvider
@@ -61,6 +59,27 @@ class ProductRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             if (e is CancellationException) throw e // Propagate cancellation
             Result.success(cachedProducts.map { it.toDomainModel(taxProvider) })
+        }
+    }
+
+    override suspend fun getProductDetails(id: Long): Result<Product> {
+        val cachedProduct = productDao.getProducts().firstOrNull { it.id == id }
+        val isCacheValid =
+            cachedProduct != null && System.currentTimeMillis() - cachedProduct.cachedAt < CACHE_TIMEOUT
+        return try {
+            if (isCacheValid) {
+                Result.success(cachedProduct.toDomainModel(taxProvider))
+            } else {
+                val updatedProduct = api.getProductDetails(id)
+                Result.success(updatedProduct.toDomainModel(taxProvider))
+            }
+
+        } catch (e: Exception) {
+            return if (isCacheValid) {
+                Result.success(cachedProduct.toDomainModel(taxProvider))
+            } else {
+                Result.failure(e)
+            }
         }
     }
 }
