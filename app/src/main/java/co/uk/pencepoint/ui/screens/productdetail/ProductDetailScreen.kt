@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import co.uk.pencepoint.domain.model.Category
 import co.uk.pencepoint.domain.model.Money
 import co.uk.pencepoint.domain.model.Product
+import co.uk.pencepoint.ui.navigation.LocalNavActions
 import co.uk.pencepoint.ui.theme.PencePointTheme
 import coil.compose.AsyncImage
 
@@ -42,17 +44,25 @@ import coil.compose.AsyncImage
 @Composable
 fun ProductDetailScreen(
     uiState: ProductDetailsUiState,
-    onBackClick: () -> Unit,
     onAddToCartClick: (Product) -> Unit
 ) {
+    val actions = LocalNavActions.current
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Product Details") },
+                title = { Text(text = "") },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = actions.onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = actions.onViewBasketClick) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
                             contentDescription = "Back"
                         )
                     }
@@ -216,8 +226,7 @@ fun ProductDetailPreview() {
                     taxRate = 20.0
                 )
             ),
-            onBackClick = {},
-            onAddToCartClick = {}
+            onAddToCartClick = {},
         )
     }
 }
