@@ -3,11 +3,14 @@ package co.uk.pencepoint.ui.screens.productlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.uk.pencepoint.domain.model.Product
+import co.uk.pencepoint.domain.repository.BasketRepository
 import co.uk.pencepoint.domain.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,17 +20,25 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    private val repository: ProductRepository
+    private val repository: ProductRepository,
+    basketRepository: BasketRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProductListUiState())
-    val uiState: StateFlow<ProductListUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<ProductListUiState> = combine(
+        _uiState,
+        basketRepository.getBasketItems()
+    ) { state, basketItems ->
+        state.copy(basketCount = basketItems.size)
+    }.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000), ProductListUiState()
+    )
 
     init {
         loadProducts()
     }
 
-    fun loadProducts() {
+    internal fun loadProducts() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             repository.getProducts()
@@ -44,5 +55,6 @@ class ProductListViewModel @Inject constructor(
 data class ProductListUiState(
     val products: List<Product> = emptyList(),
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val basketCount: Int = 0
 )
