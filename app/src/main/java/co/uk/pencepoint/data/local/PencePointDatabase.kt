@@ -17,7 +17,7 @@ import co.uk.pencepoint.data.local.typeconverters.PencePointTypeConverters
  */
 @Database(
     entities = [ProductEntity::class, BasketItemEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(PencePointTypeConverters::class)

@@ -8,6 +8,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import co.uk.pencepoint.ui.screens.basket.BasketScreen
+import co.uk.pencepoint.ui.screens.basket.BasketViewModel
 import co.uk.pencepoint.ui.screens.home.HomeScreen
 import co.uk.pencepoint.ui.screens.productdetail.ProductDetailScreen
 import co.uk.pencepoint.ui.screens.productdetail.ProductDetailsViewModel
@@ -55,11 +57,24 @@ fun NavGraph(
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 ProductDetailScreen(
                     uiState = uiState,
-                    onAddToCartClick = { /* Handle adding to cart */ }
+                    onAddToCartClick = { product ->
+                        viewModel.addToBasket(product, 1)
+                    }
                 )
             }
             composable<Screen.Basket> {
-                // Placeholder for Basket Screen
+                val viewModel: BasketViewModel = hiltViewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                BasketScreen(
+                    uiState = uiState,
+                    updateQuantity = { id, newQuantity ->
+                        viewModel.updateQuantity(id, newQuantity)
+                    },
+                    removeFromBasket = { id ->
+                        viewModel.removeFromBasket(id)
+                    },
+                    onCheckoutClick = { /* Handle checkout */ }
+                )
             }
             composable<Screen.TransactionHistory> {
                 // Placeholder for History Screen

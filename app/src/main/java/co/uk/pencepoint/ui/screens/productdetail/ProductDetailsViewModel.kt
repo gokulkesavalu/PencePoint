@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import co.uk.pencepoint.domain.model.Product
 import co.uk.pencepoint.domain.repository.ProductRepository
+import co.uk.pencepoint.domain.usecases.AddToBasketUseCase
 import co.uk.pencepoint.ui.navigation.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    private val addToBasketUseCase: AddToBasketUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailsUiState())
@@ -39,10 +41,21 @@ class ProductDetailsViewModel @Inject constructor(
                 }
         }
     }
+
+    internal fun addToBasket(product: Product, quantity: Int) {
+        viewModelScope.launch {
+            addToBasketUseCase(product, quantity).onSuccess {
+                _uiState.value = _uiState.value.copy(basketCount = _uiState.value.basketCount + 1)
+            }.onFailure {
+                _uiState.value = _uiState.value.copy(error = it.message)
+            }
+        }
+    }
 }
 
 data class ProductDetailsUiState(
     val product: Product? = null,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val basketCount: Int = 0
 )

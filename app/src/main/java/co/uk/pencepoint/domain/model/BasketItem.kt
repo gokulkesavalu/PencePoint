@@ -9,6 +9,7 @@ import kotlin.math.roundToLong
  * @property quantity The number of units of the product in the basket.
  */
 data class BasketItem(
+    val id: Long,
     val product: Product,
     val quantity: Int
 ) {
@@ -17,7 +18,7 @@ data class BasketItem(
      */
     val subtotal: Money
         get() = product.price * quantity
-    
+
     /**
      * The total tax amount for this item based on the product's tax rate.
      */

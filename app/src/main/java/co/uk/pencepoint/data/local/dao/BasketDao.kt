@@ -3,6 +3,8 @@ package co.uk.pencepoint.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import co.uk.pencepoint.data.local.entities.BasketItemEntity
+import co.uk.pencepoint.data.local.entities.ProductEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Data Access Object for the basket_items table.
@@ -11,12 +13,12 @@ import co.uk.pencepoint.data.local.entities.BasketItemEntity
 interface BasketDao {
 
     /**
-     * Retrieves all items in the basket.
+     * Observes all items in the basket.
      *
-     * @return A list of [BasketItemEntity] representing the current basket contents.
+     * @return A [Flow] emitting a list of [BasketItemEntity] whenever the basket table changes.
      */
     @Query("SELECT * FROM basket_items")
-    suspend fun getBasketItems(): List<BasketItemEntity>
+    fun observeBasketItems(): Flow<List<BasketItemEntity>>
 
     /**
      * Adds a new item to the basket.
@@ -25,7 +27,7 @@ interface BasketDao {
      * @param quantity The number of units to add.
      */
     @Query("INSERT INTO basket_items (product, quantity) VALUES (:product, :quantity)")
-    suspend fun addToBasket(product: String, quantity: Int)
+    suspend fun addToBasket(product: ProductEntity, quantity: Int)
 
     /**
      * Updates the quantity of an existing basket item.

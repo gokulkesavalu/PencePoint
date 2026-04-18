@@ -64,6 +64,22 @@ fun ProductDto.toEntity() = ProductEntity(
 )
 
 /**
+ * Converts a domain [Product] to a [ProductEntity] for local storage.
+ *
+ * @return A [ProductEntity] suitable for Room database persistence.
+ */
+fun Product.toEntity() = ProductEntity(
+    id = id,
+    title = title,
+    description = description,
+    price = price.amountInPence / 100.0,
+    category = category.name,
+    image = imageUrl,
+    rating = RatingEntity(rate = 0.0, count = 0),
+    cachedAt = System.currentTimeMillis()
+)
+
+/**
  * Maps a category string from the API to the internal [Category] enum.
  *
  * @param category The category string to map.

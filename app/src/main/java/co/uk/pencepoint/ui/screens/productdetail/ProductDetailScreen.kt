@@ -68,7 +68,7 @@ fun ProductDetailScreen(
                         BadgedBox(
                             badge = {
                                 Badge {
-                                    Text(text = "0")
+                                    Text(text = uiState.basketCount.toString())
                                 }
                             }
                         ) {

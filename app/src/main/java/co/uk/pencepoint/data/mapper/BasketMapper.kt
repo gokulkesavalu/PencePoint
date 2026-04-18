@@ -15,6 +15,18 @@ import co.uk.pencepoint.domain.repository.TaxProvider
  * @return A [BasketItem] containing domain model product details and quantity.
  */
 fun BasketItemEntity.toDomainModel(taxProvider: TaxProvider) = BasketItem(
+    id = id,
     product = product.toDomainModel(taxProvider),
+    quantity = quantity
+)
+
+/**
+ * Converts a domain model [BasketItem] to its Room entity [BasketItemEntity].
+ *
+ * @return A [BasketItemEntity] suitable for local storage.
+ */
+fun BasketItem.toEntity() = BasketItemEntity(
+    id = id,
+    product = product.toEntity(),
     quantity = quantity
 )
