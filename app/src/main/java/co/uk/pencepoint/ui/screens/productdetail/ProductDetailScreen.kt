@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -70,6 +69,7 @@ fun ProductDetailScreen(
                 uiState.isLoading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
+
                 uiState.error != null -> {
                     Text(
                         text = uiState.error,
@@ -79,6 +79,7 @@ fun ProductDetailScreen(
                             .padding(16.dp)
                     )
                 }
+
                 uiState.product != null -> {
                     ProductDetailContent(
                         product = uiState.product,
@@ -96,80 +97,89 @@ private fun ProductDetailContent(
     onAddToCartClick: (Product) -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Top half: Product Image
-        AsyncImage(
-            model = product.imageUrl,
-            contentDescription = product.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f)
-                .height(350.dp), // Height constraint for scrollability
-            contentScale = ContentScale.Fit
-        )
-
-        // Bottom half: Product Details
+        // Scrollable content area
         Column(
             modifier = Modifier
-                .padding(24.dp)
-                .fillMaxWidth()
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                text = product.title,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = product.price.displayValue,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold
-            )
-            
-            Spacer(modifier = Modifier.height(4.dp))
-            
-            Text(
-                text = "Tax Rate: ${product.taxRate}%",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.secondary
+            // Top half: Product Image
+            AsyncImage(
+                model = product.imageUrl,
+                contentDescription = product.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(350.dp),
+                contentScale = ContentScale.Fit
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            Text(
-                text = "Category",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.outline
-            )
-            Text(
-                text = product.category.name,
-                style = MaterialTheme.typography.bodyLarge
-            )
+            // Product Details
+            Column(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = product.title,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = "Description",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = product.description,
-                style = MaterialTheme.typography.bodyLarge,
-                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.2
-            )
+                Text(
+                    text = product.price.displayValue,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
+                Text(
+                    text = "Tax Rate: ${product.taxRate}%",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Category",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.outline
+                )
+                Text(
+                    text = product.category.name,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = "Description",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = product.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.2
+                )
+            }
+        }
+
+        // Fixed Add to Cart Button Section
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             Button(
                 onClick = { onAddToCartClick(product) },
                 modifier = Modifier
@@ -181,14 +191,16 @@ private fun ProductDetailContent(
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
 @Preview(showBackground = true, name = "Detail - Light Mode")
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Detail - Dark Mode")
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Detail - Dark Mode"
+)
 @Composable
 fun ProductDetailPreview() {
     PencePointTheme {
@@ -196,7 +208,7 @@ fun ProductDetailPreview() {
             uiState = ProductDetailsUiState(
                 product = Product(
                     id = 1,
-                    title = "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+                    title = "No. 1 Backpack, Fits 15 Laptops",
                     price = Money(10995),
                     description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
                     category = Category.OTHER,
