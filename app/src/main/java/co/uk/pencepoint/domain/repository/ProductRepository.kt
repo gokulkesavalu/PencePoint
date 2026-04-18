@@ -17,4 +17,12 @@ interface ProductRepository {
      * @return A [Result] containing a list of [Product] objects.
      */
     suspend fun getProducts(category: String? = null): Result<List<Product>>
+
+    /**
+     * Fetches a single product by its ID.
+     *
+     * @param id The unique identifier of the product.
+     * @return A [Result] containing the [Product] if found, or a failure if it doesn't exist.
+     */
+    suspend fun getProductById(id: Long): Result<Product>
 }

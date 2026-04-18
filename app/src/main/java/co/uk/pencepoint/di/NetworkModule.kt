@@ -1,7 +1,7 @@
 package co.uk.pencepoint.di
 
-import co.uk.pencepoint.data.remote.FakeStoreApi
 import co.uk.pencepoint.BuildConfig
+import co.uk.pencepoint.data.remote.FakeStoreApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
