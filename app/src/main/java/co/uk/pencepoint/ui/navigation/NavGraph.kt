@@ -36,7 +36,7 @@ fun NavGraph(
                 uiState = uiState
             )
         }
-        composable<Screen.ProductDetail> { backStackEntry ->
+        composable<Screen.ProductDetail> { _ ->
             val viewModel: ProductDetailsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             ProductDetailScreen(
