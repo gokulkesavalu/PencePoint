@@ -2,8 +2,10 @@ package co.uk.pencepoint.di
 
 import co.uk.pencepoint.data.repository.BasketRepositoryImpl
 import co.uk.pencepoint.data.repository.ProductRepositoryImpl
+import co.uk.pencepoint.data.repository.TransactionRepositoryImpl
 import co.uk.pencepoint.domain.repository.BasketRepository
 import co.uk.pencepoint.domain.repository.ProductRepository
+import co.uk.pencepoint.domain.repository.TransactionRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,4 +38,13 @@ abstract class RepositoryModule {
     abstract fun bindBasketRepository(
         basketRepositoryImpl: BasketRepositoryImpl
     ): BasketRepository
+
+    /**
+     * Binds the [TransactionRepositoryImpl] to the [TransactionRepository] interface.
+     */
+    @Binds
+    @Singleton
+    abstract fun bindTransactionRepository(
+        transactionRepositoryImpl: TransactionRepositoryImpl
+    ): TransactionRepository
 }

@@ -97,4 +97,18 @@ class BasketRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    /**
+     * Clears all items from the shopping basket.
+     *
+     * @return A [Result] of [Unit] indicating success or failure.
+     */
+    override suspend fun clearBasket(): Result<Unit> {
+        return try {
+            basketDao.clearBasket()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -5,18 +5,20 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import co.uk.pencepoint.data.local.dao.BasketDao
 import co.uk.pencepoint.data.local.dao.ProductDao
+import co.uk.pencepoint.data.local.dao.TransactionDao
 import co.uk.pencepoint.data.local.entities.BasketItemEntity
 import co.uk.pencepoint.data.local.entities.ProductEntity
+import co.uk.pencepoint.data.local.entities.TransactionEntity
 import co.uk.pencepoint.data.local.typeconverters.PencePointTypeConverters
 
 /**
  * Main database for the PencePoint application.
  *
- * This database provides the local storage for products and other point-of-sale data,
- * enabling offline-first functionality.
+ * This database provides the local storage for products, shopping basket items,
+ * and transaction history, enabling offline-first functionality.
  */
 @Database(
-    entities = [ProductEntity::class, BasketItemEntity::class],
+    entities = [ProductEntity::class, BasketItemEntity::class, TransactionEntity::class],
     version = 2,
     exportSchema = false
 )
@@ -28,7 +30,12 @@ abstract class PencePointDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
     /**
-     * Returns the [BasketDao] to access basket-related data.
+     * Returns the [BasketDao] to access shopping basket data.
      */
     abstract fun basketDao(): BasketDao
+
+    /**
+     * Returns the [TransactionDao] to access transaction history.
+     */
+    abstract fun transactionDao(): TransactionDao
 }

@@ -40,4 +40,11 @@ interface BasketRepository {
      * @return A [Result] indicating success or failure.
      */
     suspend fun removeFromBasket(id: Long): Result<Unit>
+
+    /**
+     * Clears all items from the shopping basket.
+     *
+     * @return A [Result] indicating success or failure.
+     */
+    suspend fun clearBasket(): Result<Unit>
 }

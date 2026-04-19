@@ -5,6 +5,7 @@ import androidx.room.Room
 import co.uk.pencepoint.data.local.PencePointDatabase
 import co.uk.pencepoint.data.local.dao.BasketDao
 import co.uk.pencepoint.data.local.dao.ProductDao
+import co.uk.pencepoint.data.local.dao.TransactionDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,7 +46,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideProductDao(appDatabase: PencePointDatabase) = appDatabase.productDao()
-    
+
     /**
      * Provides the [BasketDao] for basket-related operations.
      *
@@ -56,4 +57,13 @@ object DatabaseModule {
     @Singleton
     fun provideBasketDao(appDatabase: PencePointDatabase) = appDatabase.basketDao()
 
+    /**
+     * Provides the [TransactionDao] for transaction-related operations.
+     *
+     * @param appDatabase The [PencePointDatabase] instance.
+     * @return The [TransactionDao] instance.
+     */
+    @Provides
+    @Singleton
+    fun provideTransactionDao(appDatabase: PencePointDatabase) = appDatabase.transactionDao()
 }

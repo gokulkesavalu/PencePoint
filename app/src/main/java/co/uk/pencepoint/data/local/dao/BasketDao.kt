@@ -45,4 +45,10 @@ interface BasketDao {
      */
     @Query("DELETE FROM basket_items WHERE id = :id")
     suspend fun removeFromBasket(id: Long)
+
+    /**
+     * Clears all items from the basket.
+     */
+    @Query("DELETE FROM basket_items")
+    suspend fun clearBasket()
 }

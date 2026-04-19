@@ -1,9 +1,11 @@
 package co.uk.pencepoint.data.local.typeconverters
 
 import androidx.room.TypeConverter
+import co.uk.pencepoint.data.local.entities.BasketItemEntity
 import co.uk.pencepoint.data.local.entities.ProductEntity
 import co.uk.pencepoint.data.local.entities.RatingEntity
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 /**
  * Room type converters for the PencePoint application.
@@ -44,5 +46,22 @@ class PencePointTypeConverters {
     @TypeConverter
     fun toProductEntity(productString: String): ProductEntity {
         return gson.fromJson(productString, ProductEntity::class.java)
+    }
+
+    /**
+     * Converts a list of [BasketItemEntity] to a JSON string.
+     */
+    @TypeConverter
+    fun fromBasketItemList(items: List<BasketItemEntity>): String {
+        return gson.toJson(items)
+    }
+
+    /**
+     * Converts a JSON string back to a list of [BasketItemEntity].
+     */
+    @TypeConverter
+    fun toBasketItemList(itemsString: String): List<BasketItemEntity> {
+        val type = object : TypeToken<List<BasketItemEntity>>() {}.type
+        return gson.fromJson(itemsString, type)
     }
 }
